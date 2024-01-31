@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 export default function Redirect({ path }: { path: string }) {
     const { push } = useRouter();
 
-
     useEffect(() => {
         push(path)
     }, [])
