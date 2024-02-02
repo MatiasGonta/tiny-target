@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib";
+import { Providers } from "@/components";
 import "./globals.css";
 
 export const fontInter = Inter({
@@ -19,11 +20,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
+      <head>
+        <link rel="icon" href="/tiny-target-logo.ico"></link>
+      </head>
       <body className={cn(
         "min-h-screen bg-background font-sans antialiased",
         fontInter.variable
-      )}>{children}</body>
+      )}>
+        <Providers>
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }

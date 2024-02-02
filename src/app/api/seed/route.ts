@@ -3,15 +3,14 @@ import { NextResponse, NextRequest } from "next/server";
 import { UrlModel } from "@/models";
 
 export async function GET() {
-    connectDB();
-
-
+    await connectDB();
     
     await UrlModel.deleteMany({});
     // clearCloudinaryStore();
     await UrlModel.insertMany({
         original: 'https://nextjs.org',
         short: Math.random().toString(36).substring(2,7),
+        createdBy: 'maret2023@gmail.com',
     });
     
     return NextResponse.json({

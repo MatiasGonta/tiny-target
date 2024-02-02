@@ -19,6 +19,8 @@ const config = {
     },
     extend: {
       colors: {
+        "tiny-target-primary": "#3b2108",
+        "tiny-target-secondary": "#c6a687",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
