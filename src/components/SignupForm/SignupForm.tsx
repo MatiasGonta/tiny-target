@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import { signupSchema } from "@/validations";
+import { signup } from "@/lib";
+import { updatedUnauthUrlsWithLocalStorage } from "@/utils";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
     const { push } = useRouter();
@@ -36,17 +39,13 @@ export default function RegisterForm() {
         if (values.password !== values.confirmPassword) return;
 
         try {
-            const signupResponse = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(values),
-            })
-
-            if (!signupResponse || !signupResponse.ok) throw new Error(signupResponse.statusText);
-
-            const { data } = await signupResponse.json();
+            toast.loading("Cargando...");
+            const { data, status, message } = await signup(values);
+            if (status !== 201) {
+                toast.dismiss();
+                toast.error(message);
+                throw new Error(message);
+            }
 
             const res = await signIn('credentials', {
                 email: data.email,
@@ -55,6 +54,8 @@ export default function RegisterForm() {
             });
 
             if (res && res?.ok) {
+                updatedUnauthUrlsWithLocalStorage(data.email);
+                toast.dismiss();
                 return push('/');
             }
         } catch (error) {

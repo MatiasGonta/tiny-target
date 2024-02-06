@@ -16,6 +16,7 @@ const urlSchema = new Schema<UrlItem>({
   short: {
     type: String,
     required: true,
+    unique: true,
   },
   createdBy: {
     type: String,

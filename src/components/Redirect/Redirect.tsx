@@ -10,5 +10,5 @@ export default function Redirect({ path }: { path: string }) {
         push(path)
     }, [])
 
-    return <div>Redirecting...</div>;
+    return <div>Redirigiendo...</div>;
 }

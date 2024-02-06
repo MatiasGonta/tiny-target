@@ -1,62 +1,49 @@
-import { connectDB } from "@/utils";
 import { NextResponse, NextRequest } from "next/server";
 import { UrlModel } from "@/models";
+import { connectDB } from "@/utils";
 
-export async function GET() {
-    try {
-        await connectDB();
-
-        const urls = await UrlModel.find();
-
-        return NextResponse.json({
-            message: 'Se obtuvo las urls con exito!',
-            data: urls
-        });
-    } catch (error) {
-        console.log(error)
-        return NextResponse.json({ message: 'Hubo un error al momento de obtener las urls' });
-    }
-}
-
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest) {    
     const { url, alias, user_email } = await req.json();
+    const user = user_email || 'Anonymous';
     let shortUrl: string;
 
     try {
+        await connectDB();
+
         // Validations
-        if (!alias) {
-            shortUrl = Math.random().toString(36).substring(2,9);
+        if (alias && alias.trim() !== "" && (alias.trim().length >= 5 && alias.trim().length <= 30)) {
+            shortUrl = alias.trim();
         } else {
-            shortUrl = alias;
+            shortUrl = Math.random().toString(36).substring(2,9);
         }
 
-        if (!url || !user_email) throw new Error('No se ha recibido la url y/o el email del usuario');
-        
-        const existInDb = await UrlModel.findOne({ original: url });
+        if (!url) return NextResponse.json({ message: 'Hubo un error al momento de obtener los datos.', status: 400 });
 
-        if (existInDb && existInDb.createdBy === user_email) return NextResponse.json({
-            message: 'Ya creaste una url corta para esa url!',
-            data: existInDb,
-        });
+        const existAlias = await UrlModel.findOne({ short: shortUrl });
+        if (existAlias) {
+            if (alias && alias.trim() !== "" && (alias.trim().length >= 5 && alias.trim().length <= 30)) return NextResponse.json({
+                message: 'El alias proporcionado no está disponible. Por favor, elige otro.',
+                data: existAlias,
+                status: 409
+            });
 
-        if (existInDb && (!alias || alias === "" || alias === existInDb.short)) return NextResponse.json({
-            message: 'Ya existe una url corta para esa url!',
-            data: existInDb,
-        });
+            shortUrl = Math.random().toString(36).substring(2,9);
+        }
 
         // Create new url
         const newShortUrl = await UrlModel.create({
             original: url,
             short: shortUrl,
-            createdBy: user_email,
+            createdBy: user,
         });
 
         return NextResponse.json({
-            message: 'Url creada con exito!',
+            message: 'Url creada exitosamente.',
             data: newShortUrl,
+            status: 201
         });
     } catch (error) {
         console.log(error)
-        return NextResponse.json({ message: 'Hubo un error al momento de crear la url' });
+        return NextResponse.json({ message: 'Hubo un error al momento de crear la url', status: 500 });
     }
 }

@@ -1,27 +1,48 @@
+import { TINY_TARGET_URL } from "@/constants";
 import { User } from "@/models";
 
-export async function getUrls() {
-    const URL = process.env.NEXT_URL + 'api/url';
-    const response = await fetch(URL, { next: { tags: ['urls'] } });
-    const data = await response.json();
+export async function signup(newUser: {
+    fullName: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+}) {
+    const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+    })
+    const data = await res.json();
 
     return data;
 }
 
-export async function getCreatedUrlsByUser(user_email: User['email'], filters?: { limit?: number | null; page?: number | null; search?: string | null }) {
-    let URL = process.env.NEXT_URL + 'api/url/' + user_email;
+export async function getUrls(user_email: User['email'], filters?: { page?: number | null; search?: string | null }) {
+    let URL = TINY_TARGET_URL + '/api/url/' + user_email;
 
-    if (filters?.limit) URL += '?limit=' + filters.limit;
-    if (filters?.page) URL += '?page=' + filters.page;
-    if (filters?.search) URL += '?search=' + filters.search;
-    
+    const params = new URLSearchParams();
+
+    if (filters?.page !== undefined && filters.page !== null) {
+        params.append('page', filters.page.toString());
+    }
+    if (filters?.search) {
+        params.append('search', filters.search);
+    }
+
+    // Agregar los parámetros a la URL
+    if (params.toString() !== '') {
+        URL += `?${params.toString()}`;
+    }
+    console.log(URL)
     const response = await fetch(URL, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
         next: {
-            tags: ['user-urls']
+            tags: ['urls']
         }
     });
     const data = await response.json();
@@ -44,12 +65,41 @@ export async function createUrl(newUrlData: { user_email: string, url: string; a
 }
 
 export async function deleteUrl(id: string) {
-    const URL = 'http://localhost:3000/api/url/delete/' + id;
+    const URL = '/api/url/delete/' + id;
     const response = await fetch(URL, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
+    });
+    const data = await response.json();
+
+    return data;
+}
+
+export async function updateUrl(id: string, newUrlData: { newOriginal: string; newShort: string }) {
+    const URL = '/api/url/put/' + id;
+    const response = await fetch(URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUrlData)
+    });
+    const data = await response.json();
+
+    return data;
+}
+
+export async function updatedUnauthUrls(user_email: User['email'], unauthedUrlIds: string[]) {
+    console.log('asidokas: ',unauthedUrlIds)
+    const URL = '/api/url/' + user_email;
+    const response = await fetch(URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ unauthedUrlIds })
     });
     const data = await response.json();
 

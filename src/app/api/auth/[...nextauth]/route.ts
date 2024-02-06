@@ -1,3 +1,4 @@
+import { updatedUnauthUrlsWithLocalStorage } from "@/utils";
 import { UserModel } from "@/models";
 import { connectDB } from "@/utils";
 import { compare } from "bcryptjs";
@@ -41,6 +42,9 @@ const handler = NextAuth({
             return session;
         },
     },
+    pages: {
+        signIn: '/auth',
+    }
 })
 
 export { handler as GET, handler as POST };

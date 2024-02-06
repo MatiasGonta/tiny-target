@@ -19,10 +19,12 @@ export async function connectDB() {
     conn.isConnected = db.connections[0].readyState === 1;
 }
 
-connection.on('connected', () => {
-    console.log('connected to mongodb');
-})
+if (connection) {
+    connection.on('connected', () => {
+        console.log('connected to mongodb');
+    });
 
-connection.on('error', (err) => {
-    console.log('error mongodb', err);
-})
+    connection.on('error', (err) => {
+        console.log('error mongodb', err);
+    });
+}

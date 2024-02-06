@@ -3,19 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, Input, Button, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import { signinSchema } from "@/validations";
+import { updatedUnauthUrlsWithLocalStorage } from "@/utils";
+import { toast } from "sonner";
+import { TINY_TARGET_URL } from "@/constants";
 
 export default function LoginForm() {
     const { push } = useRouter();
@@ -28,9 +22,10 @@ export default function LoginForm() {
         },
     })
 
+    // Handle submit
     const handleGoogle = async () => {
         await signIn('google', {
-            callbackUrl: process.env.NEXT_URL!,
+            callbackUrl: TINY_TARGET_URL,
         });
     };
 
@@ -38,6 +33,7 @@ export default function LoginForm() {
         if (!values || !values.email || !values.password) return;
 
         try {
+            toast.loading("Cargando...");
             const res = await signIn('credentials', {
                 email: values.email,
                 password: values.password,
@@ -45,25 +41,24 @@ export default function LoginForm() {
             });
 
             if (res && res?.ok) {
+                updatedUnauthUrlsWithLocalStorage(values.email);
+
+                toast.dismiss();
                 return push('/');
+            } else if (res && res?.error) {
+                throw new Error(res.error);
             }
         } catch (error) {
-            console.error(error);
+            toast.dismiss();
+            toast.error(error?.message);
         }
     }
 
     return (
-        <div className="flex flex-col items-center gap-3.5">
-            <div>
-                {/* <button
-                    onClick={() => signIn("google")}
-                    className="w-full flex items-center font-semibold justify-center h-14 px-6 mt-4 text-xl  transition-colors duration-300 bg-white border-2 border-black text-black rounded-lg focus:shadow-outline hover:bg-slate-200"
-                >
-                    <Image src={googleLogo} alt="Google Logo" width={20} height={20} />
-                    <span className="ml-4">Continue with Google</span>
-                </button> */}
+        <div className="w-full max-w-[400px]">
+            <div className="w-full">
                 <button
-                    className="max-w-[320px] flex py-2.5 text-[14px] px-8 leading-3 font-bold text-center uppercase align-middle items-center rounded-md border border-[rgba(0,0,0,0.25)] gap-4 text-[#303030] bg-white cursor-pointer"
+                    className="w-full max-w-[400px] flex justify-center py-2.5 text-[14px] px-8 leading-3 font-bold text-center uppercase align-middle items-center rounded-md border border-[rgba(0,0,0,0.25)] gap-4 text-[#505050] bg-white cursor-pointer"
                     onClick={handleGoogle}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262">
@@ -76,8 +71,10 @@ export default function LoginForm() {
                 </button>
             </div>
 
-            <div>
-                <strong>o</strong>
+            <div className="flex gap-1.5 items-center w-full max-w-[400px] mx-auto my-4">
+                <div className="w-full h-px bg-[#ddd] mt-1" />
+                <p className="text-center w-fit text-nowrap text-[14px] text-[#aaa]">o con su email y contraseña</p>
+                <div className="w-full h-px bg-[#ddd] mt-1" />
             </div>
 
             <div>

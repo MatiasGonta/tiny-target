@@ -1,11 +1,7 @@
 'use server'
  
-import { revalidateTag } from 'next/cache'
- 
-export async function revalidateUrlsAction() {
-  revalidateTag('urls');
-}
+import { revalidateTag } from 'next/cache';
 
-export async function revalidateUserUrlsAction() {
-  revalidateTag('user-urls');
+export async function  revalidateUrlsAction() {
+  revalidateTag('urls');
 }
