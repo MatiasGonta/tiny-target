@@ -1,1 +1,1 @@
-export const TINY_TARGET_URL = 'https://tinytarget.vercel.app/';
+export const TINY_TARGET_URL = 'https://tiny.target.vercel.app/';
