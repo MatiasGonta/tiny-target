@@ -12,7 +12,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { [key
   if (!session || !session.user || !session.user.email) return redirect('/auth');
 
   return (
-    <main>
+    <main className="pb-12">
       <section className="flex flex-col items-center gap-8">
         <article className="relative flex flex-col gap-2.5 justify-center items-center w-full max-w-[1024px] pt-8 md:gap-0 md:flex-row lg:justify-end">
           <h1 className="left-0 text-foreground font-bold text-[35px] md:absolute md:pl-5 lg:pl-0">Dashboard</h1>

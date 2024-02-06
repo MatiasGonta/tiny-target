@@ -1,4 +1,3 @@
-import { updatedUnauthUrlsWithLocalStorage } from "@/utils";
 import { UserModel } from "@/models";
 import { connectDB } from "@/utils";
 import { compare } from "bcryptjs";
