@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export function Footer() {
     return (
-        <footer className="fixed w-full bottom-0">
-            <div className="size-full h-12 flex justify-between items-center px-6 animate-slide-up">
+        <footer className="fixed w-full bottom-0 bg-white z-100">
+            <div className="size-full h-12 flex justify-between items-center px-6 animate-slide-up bg-white">
                 <p className="text-sm text-foreground">
                     Hecho por <Link href="https://matiasgonta.vercel.app/" target="_blank" className="underline transition-colors text-foreground hover:text-tiny-target-primary dark:hover:text-tiny-target-secondary">Matías Gonta</Link> • © {new Date().getFullYear()} Tiny Target. Todos los derechos reservados.
                 </p>

@@ -51,24 +51,26 @@ function NavLinks() {
             { navigateLoader && <Skeleton className="fixed top-0 left-0 w-full h-1.5" /> }
             <ul className="h-full flex gap-6 items-center">
                 <li className="flex justify-center items-center" onClick={() => handleNavigateLoader("/")}>
-                    <Link href="/" className="border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Inicio</Link>
+                    <Link href="/" className="h-5 border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Inicio</Link>
                 </li>
                 <li className="flex justify-center items-center" onClick={() => handleNavigateLoader("/dashboard")}>
-                    <Link href="/dashboard" className="border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Panel de control</Link>
+                    <Link href="/dashboard" className="min-[400px]:h-5 border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Panel de control</Link>
                 </li>
                 {
                     session
                         ? (
                             <li className="flex justify-center items-center" onClick={() => handleNavigateLoader("/auth")}>
-                                <button type="button" onClick={handleSignout} className="border border-tiny-target-primary rounded bg-transparent p-1.5 text-wrap text-center hover:border-tiny-target-primary/75 hover:text-tiny-target-primary/75">Cerrar sesión</button>
+                                <button type="button" onClick={handleSignout} className="flex justify-center items-center border border-tiny-target-primary rounded bg-transparent p-1.5 text-wrap text-center hover:border-tiny-target-primary/75 hover:text-tiny-target-primary/75">
+                                    <span className="min-[400px]:h-5">Cerrar sesión</span>
+                                </button>
                             </li>
                         ) : (
                             <>
                                 <li className="flex justify-center items-center" onClick={() => handleNavigateLoader("/auth")}>
-                                    <Link href="/auth" className="border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Iniciar sesión</Link>
+                                    <Link href="/auth" className="h-5 border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Iniciar sesión</Link>
                                 </li>
                                 <li className="flex justify-center items-center" onClick={() => handleNavigateLoader("/auth")}>
-                                    <Link href="/auth" className="border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Registrarse</Link>
+                                    <Link href="/auth" className="h-5 border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Registrarse</Link>
                                 </li>
                             </>
                         )

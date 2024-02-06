@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { cn } from "@/lib";
 import { Footer, SessionProvider, ThemeProvider, Toaster } from "@/components";
+import '@fontsource/yantramanav';
 import "./globals.css";
-
-export const fontInter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-})
 
 export const metadata: Metadata = {
   title: "Tiny Target",
@@ -29,9 +24,8 @@ export default function RootLayout({
         <link rel="icon" href="/tiny-target-logo.ico"></link>
       </head>
       <body className={cn(
-        "min-h-screen bg-background font-sans antialiased",
-        fontInter.variable
-      )}>
+        "min-h-screen bg-background font-sans antialiased"
+      )} style={{ fontFamily: "'Yantramanav', sans-serif" }}>
         <SessionProvider>
           <ThemeProvider
             attribute="class"

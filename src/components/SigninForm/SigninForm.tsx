@@ -48,7 +48,7 @@ export default function LoginForm() {
             } else if (res && res?.error) {
                 throw new Error(res.error);
             }
-        } catch (error) {
+        } catch (error: any) {
             toast.dismiss();
             toast.error(error?.message);
         }

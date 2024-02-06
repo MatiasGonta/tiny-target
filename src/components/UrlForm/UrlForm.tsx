@@ -27,7 +27,7 @@ import { TINY_TARGET_URL } from "@/constants";
 export default function UrlForm() {
     const { data: session } = useSession();
 
-    let unauthedUrlIds = [];
+    let unauthedUrlIds: string[] = [];
     if (typeof window !== 'undefined' && window.localStorage) {
         const rawUnauthedUrlIds = localStorage.getItem("unauthedUrls");
         unauthedUrlIds = JSON.parse(rawUnauthedUrlIds!) || [];

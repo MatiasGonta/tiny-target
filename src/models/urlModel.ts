@@ -29,4 +29,4 @@ const urlSchema = new Schema<UrlItem>({
 
 urlSchema.plugin(mongoosePaginate);
 
-export const UrlModel = models.urls || model<UrlItem>('urls', urlSchema);
+export const UrlModel: any = models.urls || model<UrlItem>('urls', urlSchema);

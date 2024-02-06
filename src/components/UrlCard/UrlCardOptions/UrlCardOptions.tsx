@@ -83,7 +83,7 @@ export default function UrlCardOptions({ url }: { url: UrlItem }) {
             });
         } catch (error) {
             if (error instanceof Error && error.name === 'ZodError') {
-                const errorMessage = error.errors[0]?.message;
+                const errorMessage = (error as any).errors[0].message;
                 console.error(errorMessage);
                 toast.error(errorMessage);
             }
