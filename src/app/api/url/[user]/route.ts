@@ -12,6 +12,7 @@ export async function GET(req: NextRequest, { params }: { params: { user: string
     const options = {
         page: parseInt(pageQuery as string),
         limit: 21,
+        sort: { createdAt: -1 },
     }
 
     let filters: Record<string, any> = { createdBy: user };

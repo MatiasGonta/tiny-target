@@ -13,6 +13,7 @@ export * from './ui/button';
 export * from './ui/card';
 export * from './ui/dialog';
 export * from './ui/dropdown-menu';
+export * from './ui/emailTemplate';
 export * from './ui/footer';
 export * from './ui/form';
 export * from './ui/input';

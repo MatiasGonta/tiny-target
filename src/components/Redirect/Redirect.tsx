@@ -10,5 +10,7 @@ export default function Redirect({ path }: { path: string }) {
         push(path)
     }, [])
 
-    return <div>Redirigiendo...</div>;
+    return <div className="bg-background">
+        <div className="text-foreground">Redirigiendo...</div>
+    </div>
 }

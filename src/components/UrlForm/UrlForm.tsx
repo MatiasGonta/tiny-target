@@ -17,12 +17,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { revalidateUrlsAction } from "@/actions";
-import { urlSchema } from "@/validations";
+import { TINY_TARGET_URL } from "@/constants";
 import { useSession } from "next-auth/react";
+import { urlSchema } from "@/validations";
+import { UrlItem } from "@/models";
 import { createUrl } from "@/lib";
 import { UrlCard } from "..";
-import { UrlItem } from "@/models";
-import { TINY_TARGET_URL } from "@/constants";
 
 export default function UrlForm() {
     const { data: session } = useSession();
@@ -133,7 +133,18 @@ export default function UrlForm() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Acortar</Button>
+                        <div className="flex gap-2.5 items-center">
+                            <Button type="submit">Acortar</Button>
+                            {
+                                !session && (
+                                    <p className="text-sm text-muted-foreground">
+                                        Para crear URLs ilimitadas, por favor{' '}
+                                        <span className="font-bold">inicia sesión</span> o{' '}
+                                        <span className="font-bold">regístrate</span>.
+                                    </p>
+                                )
+                            }
+                        </div>
                     </form>
                 </Form>
             </div>

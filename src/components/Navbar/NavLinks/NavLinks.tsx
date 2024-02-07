@@ -70,7 +70,7 @@ function NavLinks() {
                                     <Link href="/auth" className="h-5 border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Iniciar sesión</Link>
                                 </li>
                                 <li className="flex justify-center items-center" onClick={() => handleNavigateLoader("/auth")}>
-                                    <Link href="/auth" className="h-5 border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Registrarse</Link>
+                                    <Link href="/auth?mode=signup" className="h-5 border-none bg-transparent text-wrap text-center mx-auto hover:text-tiny-target-primary/75">Registrarse</Link>
                                 </li>
                             </>
                         )

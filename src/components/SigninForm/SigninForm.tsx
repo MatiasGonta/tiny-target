@@ -3,24 +3,29 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, Input, Button, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components";
+import { Form, Input, Button, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components";
 import { signIn } from 'next-auth/react';
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signinSchema } from "@/validations";
 import { updatedUnauthUrlsWithLocalStorage } from "@/utils";
-import { toast } from "sonner";
 import { TINY_TARGET_URL } from "@/constants";
+import { toast } from "sonner";
+import Link from "next/link";
 
 export default function LoginForm() {
     const { push } = useRouter();
+    const searchParams = useSearchParams();
+    const defaultEmailValue = searchParams.get('email') || "";
 
     const form = useForm<z.infer<typeof signinSchema>>({
         resolver: zodResolver(signinSchema),
         defaultValues: {
-            email: "",
+            email: defaultEmailValue,
             password: "",
         },
-    })
+    });
+
+    const forgetLink = form.getValues('email') && z.string().email().safeParse(form.getValues('email')).success ? `/forget-password?email=${form.getValues('email')}` : "/forget-password";
 
     // Handle submit
     const handleGoogle = async () => {
@@ -29,6 +34,12 @@ export default function LoginForm() {
         });
     };
 
+    const handleGitHub = async () => {
+        await signIn('github', {
+            callbackUrl: TINY_TARGET_URL,
+        });
+    };
+    
     const onSubmit = async (values: z.infer<typeof signinSchema>) => {
         if (!values || !values.email || !values.password) return;
 
@@ -70,6 +81,23 @@ export default function LoginForm() {
                     Continuar con Google
                 </button>
             </div>
+            <div className="w-full mt-4">
+                <button
+                    className="w-full max-w-[400px] flex gap-4 justify-center bg-[rgb(24,23,23)] text-white py-2.5 text-[14px] px-8 leading-3 font-bold text-center uppercase align-middle items-center rounded-md border-none cursor-pointer"
+                    onClick={handleGitHub}
+                >
+                    
+                    <svg fill="#ffffff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g strokeWidth="0"></g>
+                        <g strokeLinejoin="round" strokeLinecap="round"></g>
+                        <g>
+                            <rect fill="none" height="24" width="24"></rect>
+                            <path d="M12,2A10,10,0,0,0,8.84,21.5c.5.08.66-.23.66-.5V19.31C6.73,19.91,6.14,18,6.14,18A2.69,2.69,0,0,0,5,16.5c-.91-.62.07-.6.07-.6a2.1,2.1,0,0,1,1.53,1,2.15,2.15,0,0,0,2.91.83,2.16,2.16,0,0,1,.63-1.34C8,16.17,5.62,15.31,5.62,11.5a3.87,3.87,0,0,1,1-2.71,3.58,3.58,0,0,1,.1-2.64s.84-.27,2.75,1a9.63,9.63,0,0,1,5,0c1.91-1.29,2.75-1,2.75-1a3.58,3.58,0,0,1,.1,2.64,3.87,3.87,0,0,1,1,2.71c0,3.82-2.34,4.66-4.57,4.91a2.39,2.39,0,0,1,.69,1.85V21c0,.27.16.59.67.5A10,10,0,0,0,12,2Z"></path>
+                        </g>
+                    </svg>
+                    Continuar con GitHub
+                </button>
+            </div>
 
             <div className="flex gap-1.5 items-center w-full max-w-[400px] mx-auto my-4">
                 <div className="w-full h-px bg-[#ddd] mt-1" />
@@ -102,6 +130,9 @@ export default function LoginForm() {
                                     <FormControl>
                                         <Input type="password" required placeholder="Introduce su contraseña" {...field} />
                                     </FormControl>
+                                    <FormDescription>
+                                        <Link href={forgetLink} className="text-tiny-target-secondary underline">¿Olvidaste tu contraseña?</Link>
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}

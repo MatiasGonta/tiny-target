@@ -6,9 +6,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
     title: 'Autenticación | Tiny Target',
 }
-export default function AuthPage() {
+export default function AuthPage({ searchParams }: { searchParams: { [key: string]: string } }) {
+    const { mode } = searchParams;
+
     return (
-        <main className="flex w-full min-h-screen flex-col items-center justify-between p-16">
+        <main className="flex w-full min-h-screen flex-col items-center justify-between pt-20 sm:pt-16 p-16">
             <div className="absolute top-5 right-5 flex gap-1.5 items-center">
                 <TooltipProvider>
                     <Tooltip>
@@ -27,7 +29,7 @@ export default function AuthPage() {
             </div>
 
             <section>
-                <Tabs defaultValue="signin" className="w-[400px]">
+                <Tabs defaultValue={mode || "signin"} className="w-[400px]">
                     <TabsList className="grid w-full grid-cols-2 bg-tiny-target-secondary text-tiny-target-primary">
                         <TabsTrigger value="signin">Iniciar sesión</TabsTrigger>
                         <TabsTrigger value="signup">Registrarse</TabsTrigger>

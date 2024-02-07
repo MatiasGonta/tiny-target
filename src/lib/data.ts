@@ -19,6 +19,33 @@ export async function signup(newUser: {
     return data;
 }
 
+export async function sendForgetPasswordEmail(email : string) {
+    const res = await fetch("/api/auth/forget", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+    })
+    const data = await res.json();
+
+    return data;
+}
+
+export async function changePassword({ newPassword, confirmNewPassword, token }: { newPassword: string, confirmNewPassword: string, token: string }) {
+    const res = await fetch("/api/auth/change-password", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+        },
+        body: JSON.stringify({ newPassword, confirmNewPassword }),
+    })
+    const data = await res.json();
+
+    return data;
+}
+
 export async function getUrls(user_email: User['email'], filters?: { page?: number | null; search?: string | null }) {
     let URL = TINY_TARGET_URL + '/api/url/' + user_email;
 
@@ -35,7 +62,7 @@ export async function getUrls(user_email: User['email'], filters?: { page?: numb
     if (params.toString() !== '') {
         URL += `?${params.toString()}`;
     }
-    console.log(URL)
+
     const response = await fetch(URL, {
         method: 'GET',
         headers: {
@@ -92,7 +119,6 @@ export async function updateUrl(id: string, newUrlData: { newOriginal: string; n
 }
 
 export async function updatedUnauthUrls(user_email: User['email'], unauthedUrlIds: string[]) {
-    console.log('asidokas: ',unauthedUrlIds)
     const URL = '/api/url/' + user_email;
     const response = await fetch(URL, {
         method: 'PUT',
