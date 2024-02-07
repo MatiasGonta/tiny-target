@@ -1,5 +1,3 @@
-"use client"
-
 import { ForgetForm } from "@/components";
 
 export const metadata = {
